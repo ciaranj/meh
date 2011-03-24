@@ -2,7 +2,8 @@
  * Module dependencies.
  */
 var express = require('express'),
-    a1 = require('./a1');
+    auth = require('connect-auth'),
+    auth_required= require('shim');
 var app = module.exports = express.createServer();
 
 app.configure(function(){
@@ -17,25 +18,13 @@ app.configure(function(){
     secret: 'your secret here'
   }));
   
-  app.use(a1);
+  app.use(auth(auth.never()));
   
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
   app.use(express.logger({
     format: ':method :url'
   }));
-
-  a1.add_helpers(app);
-
-  app.dynamicHelpers({
-    flash: function(req, res) {
-      return req.flash();
-    },
-
-    session: function(req, res) {
-      return req.session;
-    }
-  });
 });
 
 app.configure('development', function(){
@@ -45,6 +34,8 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler());
 });
+
+var form_login_require= auth_required("/login")
 
 // Routes
 app.get('/', function(res,res){ res.send("<html><body>Welcome Please Click <a href=\"/app\">Here</a></body></html>") });

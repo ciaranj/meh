@@ -1,0 +1,16 @@
+=flash['error']
+form(method="post")
+  fieldset
+    legend General
+    p
+      label(for="email") Email:
+        input(type="text", name="email")
+        .tip
+          | Enter a valid 
+          | email address 
+          | such as <em>tj@vision-media.ca</em>.
+    p
+      label(for="password") Password:
+        input(type="password", name="password")
+  p.buttons
+    input(type="submit", value="Save")
